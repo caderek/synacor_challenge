@@ -94,7 +94,6 @@ const compute = async (program: Uint16Array) => {
   const commands = []
   let pointer = 0
   let inputs = restore()
-  console.log(inputs)
   const registers = new Uint16Array(8)
   const stack = []
 
@@ -122,10 +121,6 @@ const compute = async (program: Uint16Array) => {
     }
   }
 
-  const setRegister = (address: number, val: number) => {
-    registers[address - 32768] = val
-  }
-
   const read = () => {
     const rl = readline.createInterface({
       input: process.stdin,
@@ -151,13 +146,9 @@ const compute = async (program: Uint16Array) => {
     })
   }
 
-  while (true) {
-    let halt = false
+  let halt = false
 
-    if (halt) {
-      break
-    }
-
+  while (!halt) {
     const opcode = program[pointer]
     let autoJump = true
 
@@ -167,7 +158,7 @@ const compute = async (program: Uint16Array) => {
         break
       }
       case Opcode.SET: {
-        setRegister(program[pointer + 1], get(program[pointer + 2]))
+        set(program[pointer + 1], get(program[pointer + 2]))
         break
       }
 
