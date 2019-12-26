@@ -167,7 +167,7 @@ const compute = async (program: Uint16Array) => {
 
     if (hacked) {
       writeFileSync(
-        "hacked.log",
+        "src/hacked.log",
         `${Opcode[opcode].padEnd(4, " ")} | pointer: ${String(pointer).padStart(
           6,
           " ",
@@ -184,15 +184,6 @@ const compute = async (program: Uint16Array) => {
         ).join(", ")}\n`,
         { flag: "a" },
       )
-
-      // console.log({
-      //   op: Opcode[opcode],
-      //   pointer,
-      //   args: Array.from(
-      //     { length: Jump[opcode] - 1 },
-      //     (_, i) => program[pointer + i + 1],
-      //   ),
-      // })
     }
 
     switch (opcode) {
