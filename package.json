@@ -3,8 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon -x ts-node src/computer.ts"
+  },
   "dependencies": {
     "@types/node": "^12.12.21",
     "iter-tools": "^6.2.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
   }
 }

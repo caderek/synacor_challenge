@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from "fs"
 import * as readline from "readline"
 
 const MODULUS = 32768
-const saveFile = "save.txt"
+const saveFile = "src/save.txt"
 
 enum Opcode {
   HALT,
@@ -96,6 +96,7 @@ const compute = async (program: Uint16Array) => {
   let inputs = restore()
   const registers = new Uint16Array(8)
   const stack = []
+  let hacked = false
 
   const get = (val: number) => {
     if (val >= 32776) {
@@ -131,8 +132,20 @@ const compute = async (program: Uint16Array) => {
       rl.question("", (command) => {
         if (command === "save") {
           save(commands)
+        } else if (command === "hack") {
+          registers[7] = 1
+          hacked = true
+          console.log("Hacked!")
         } else {
           commands.push(command)
+
+          if (hacked) {
+            writeFileSync(
+              "src/hacked.log",
+              `------------>${command}<------------\n`,
+              { flag: "a" },
+            )
+          }
 
           inputs = command
             .split("")
@@ -151,6 +164,36 @@ const compute = async (program: Uint16Array) => {
   while (!halt) {
     const opcode = program[pointer]
     let autoJump = true
+
+    if (hacked) {
+      writeFileSync(
+        "hacked.log",
+        `${Opcode[opcode].padEnd(4, " ")} | pointer: ${String(pointer).padStart(
+          6,
+          " ",
+        )} | args: ${Array.from(
+          { length: Jump[opcode] - 1 },
+          (_, i) =>
+            `${String(program[pointer + i + 1]).padStart(
+              8,
+              " ",
+            )} (val: ${String(get(program[pointer + i + 1])).padStart(
+              8,
+              " ",
+            )})`,
+        ).join(", ")}\n`,
+        { flag: "a" },
+      )
+
+      // console.log({
+      //   op: Opcode[opcode],
+      //   pointer,
+      //   args: Array.from(
+      //     { length: Jump[opcode] - 1 },
+      //     (_, i) => program[pointer + i + 1],
+      //   ),
+      // })
+    }
 
     switch (opcode) {
       case Opcode.HALT: {
