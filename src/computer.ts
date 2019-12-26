@@ -320,7 +320,7 @@ const compute = async (program: Uint16Array) => {
 }
 
 const main = async () => {
-  const bin = new Uint16Array(readFileSync("./src/challenge.bin"))
+  const bin = new Uint16Array(readFileSync("./challenge.bin"))
 
   await compute(decode(bin))
 }

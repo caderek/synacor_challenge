@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^12.12.21"
+    "@types/node": "^12.12.21",
+    "iter-tools": "^6.2.6"
   }
 }
